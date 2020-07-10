@@ -27,7 +27,7 @@ namespace Project.Core.Protector
 		private bool isOuterConnected = false;
 
 		private string cmd = null;
-		private CmdFetcher fetcher = new CmdFetcher(outerHost, "/SGT/cmd.txt");
+		private CmdFetcher fetcher = new CmdFetcher(innerHost, "/SGT/cmd.txt");
 
 		public Main()
 		{
