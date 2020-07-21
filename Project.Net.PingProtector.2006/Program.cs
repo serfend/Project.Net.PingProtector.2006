@@ -19,6 +19,7 @@ namespace Project.Core.Protector
 		{
 			Application.EnableVisualStyles();
 			Application.SetCompatibleTextRenderingDefault(false);
+			new FilePlacementManager().Check();
 			var startManager = new FunctionBySchedule();
 			var regStartManager = new FunctionByReg();
 			startManager.EnableAsync();

@@ -1,0 +1,4 @@
+
+*.compressed
+*.cache
+*.dll

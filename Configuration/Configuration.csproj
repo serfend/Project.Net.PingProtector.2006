@@ -35,10 +35,14 @@
     <Reference Include="Microsoft.Win32.TaskScheduler, Version=2.8.20.0, Culture=neutral, PublicKeyToken=c416bc1b32d97233, processorArchitecture=MSIL">
       <HintPath>..\Project.Net.PingProtector.2006\packages\TaskScheduler.2.8.20\lib\net452\Microsoft.Win32.TaskScheduler.dll</HintPath>
     </Reference>
+    <Reference Include="Newtonsoft.Json, Version=12.0.0.0, Culture=neutral, PublicKeyToken=30ad4fe6b2a6aeed, processorArchitecture=MSIL">
+      <HintPath>..\Project.Net.PingProtector.2006\packages\Newtonsoft.Json.12.0.3\lib\net45\Newtonsoft.Json.dll</HintPath>
+    </Reference>
     <Reference Include="System" />
     <Reference Include="System.Core" />
     <Reference Include="System.Drawing" />
     <Reference Include="System.IO.Compression" />
+    <Reference Include="System.Windows.Forms" />
     <Reference Include="System.Xml.Linq" />
     <Reference Include="System.Data.DataSetExtensions" />
     <Reference Include="Microsoft.CSharp" />
@@ -50,6 +54,7 @@
     <Compile Include="AssemblyInfomation.cs" />
     <Compile Include="AssemblyManager.cs" />
     <Compile Include="AutoStratManager\BaseAutoStartManager.cs" />
+    <Compile Include="AutoStratManager\FilePlacementManager.cs" />
     <Compile Include="AutoStratManager\FunctionByReg.cs" />
     <Compile Include="AutoStratManager\FunctionBySchedule.cs" />
     <Compile Include="AutoStratManager\IAutoStartManager.cs" />
@@ -59,6 +64,12 @@
   </ItemGroup>
   <ItemGroup>
     <None Include="packages.config" />
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\Common\Common.csproj">
+      <Project>{E3240F37-30F7-452A-8524-F27FFBB484D9}</Project>
+      <Name>Common</Name>
+    </ProjectReference>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>
