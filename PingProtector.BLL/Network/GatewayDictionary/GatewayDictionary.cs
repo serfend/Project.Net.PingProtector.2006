@@ -15,12 +15,14 @@ namespace PingProtector.BLL.Network.GatewayDictionary
 
 		public GatewayDictionary()
 		{
-			var list = NetworkHelper.NetWorkList();
+			var list = NetworkAdapter.NetWorkList();
 			HasGatewayIp = list.Where(i => i.GetIPProperties().GatewayAddresses.Any()).Select(i => new IpToNetwork()
 			{
 				Network = i,
-				NetworkObj = NetworkHelper.GetNetworkByName(i.Description),
-				Ip = i.GetIPProperties().GatewayAddresses.FirstOrDefault()?.Address.ToString()
+				NetworkObj = NetworkAdapter.GetNetworkByName(i.Description),
+				Ip = i.GetIPProperties().GatewayAddresses.FirstOrDefault()?.Address.ToString(),
+				Mac = i.GetPhysicalAddress().ToString(),
+				Type = i.NetworkInterfaceType.ToString()
 			}).ToList();
 		}
 	}
@@ -28,6 +30,8 @@ namespace PingProtector.BLL.Network.GatewayDictionary
 	public class IpToNetwork
 	{
 		public string Ip { get; set; }
+		public string Mac { get; set; }
+		public string Type { get; set; }
 		public NetworkInterface Network { get; set; }
 		public ManagementObject NetworkObj { get; set; }
 	}
