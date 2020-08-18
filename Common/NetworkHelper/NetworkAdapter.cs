@@ -12,7 +12,7 @@ using System.Diagnostics;
 
 namespace IpSwitch.Helper
 {
-	public class NetworkHelper
+	public class NetworkAdapter
 	{
 		/// <summary>
 		/// 网卡列表
