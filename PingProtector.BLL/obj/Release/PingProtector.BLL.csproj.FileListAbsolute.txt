@@ -1,0 +1,2 @@
+C:\Users\huawei\Documents\GitHub\Project.Net.PingProtector.2006\PingProtector.BLL\obj\Release\PingProtector.BLL.csprojAssemblyReference.cache
+C:\Users\huawei\Documents\GitHub\Project.Net.PingProtector.2006\PingProtector.BLL\obj\Release\PingProtector.BLL.csproj.CoreCompileInputs.cache

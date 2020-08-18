@@ -1,0 +1,4 @@
+C:\Users\huawei\Documents\GitHub\Project.Net.PingProtector.2006\Project.Net.PingProtector.2006\obj\Release\Project.Net.PingProtector.2006.csprojAssemblyReference.cache
+C:\Users\huawei\Documents\GitHub\Project.Net.PingProtector.2006\Project.Net.PingProtector.2006\obj\Release\Project.Net.PingProtector._2006.Properties.Resources.resources
+C:\Users\huawei\Documents\GitHub\Project.Net.PingProtector.2006\Project.Net.PingProtector.2006\obj\Release\Project.Net.PingProtector.2006.csproj.GenerateResource.cache
+C:\Users\huawei\Documents\GitHub\Project.Net.PingProtector.2006\Project.Net.PingProtector.2006\obj\Release\Project.Net.PingProtector.2006.csproj.CoreCompileInputs.cache

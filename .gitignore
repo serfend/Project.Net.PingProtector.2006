@@ -2,3 +2,10 @@
 *.compressed
 *.cache
 *.dll
+*.cache
+*.pdb
+*.cache
+*.CopyComplete
+*.cache
+packages
+*.force
