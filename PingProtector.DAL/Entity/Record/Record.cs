@@ -1,8 +1,9 @@
-﻿using System;
+﻿using PingProtector.DAL.Entity.System;
+using System;
 
-namespace Project.Core.Protector.DAL.Record
+namespace Project.Core.Protector.DAL.Entity.Record
 {
-	public class Record
+	public class Record : BaseEntity<int>
 	{
 		/// <summary>
 		/// 记录时间

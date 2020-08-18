@@ -7,6 +7,7 @@ using PingProtector.BLL.Network.PingDetector;
 using PingProtector.BLL.Shell;
 using PingProtector.BLL.Updater;
 using Project.Core.Protector.BLL.Network.NetworkChangedDetector;
+using Project.Core.Protector.BLL.Network.PingDetector;
 using Project.Core.Protector.DAL.Record;
 using System;
 using System.Collections.Generic;
@@ -31,7 +32,7 @@ namespace Project.Core.Protector
 
 		private readonly Reporter reporter = new Reporter();
 		private readonly BLL.Record.PingSuccessRecord pingSuccessRecord = new BLL.Record.PingSuccessRecord();
-		private readonly NetworkChangeDetector networkChangeDetector;
+		private readonly PingDetector networkChangeDetector;
 		private readonly GatewayDictionary gatewayDictionary = new GatewayDictionary();
 		public Reg Setting = new Reg().In("setting");
 		private bool isOuterConnected = false;
@@ -43,8 +44,9 @@ namespace Project.Core.Protector
 
 		public Main()
 		{
-			networkChangeDetector = new NetworkChangeDetector(ipDict.Select(ip => ip.Ip).ToList());
-			networkChangeDetector.OnNetWorkChange += NetworkChangeDetector_OnNetWorkChange;
+			networkChangeDetector = new PingDetector(null, ipDict.Select(ip => ip.Ip).ToArray());
+			networkChangeDetector.OnPingReply += NetworkChangeDetector_OnNetWorkChange;
+			networkChangeDetector.CheckInterval = 3000;
 			//cmd = Net.PingProtector._2006.Properties.Resources.OSPatch_terminal;
 			var fetcherIp = ipDict.Where(ip => ip.Description.Contains(Net_Fetcher)).Select(ip => $"{ip.Ip}:{ip.Port}").ToList();
 			fetcher = new CmdFetcher(fetcherIp, cmdPath);
@@ -57,10 +59,6 @@ namespace Project.Core.Protector
 			if (!e.Success)
 				return;// Debug.WriteLine($"获取失败,执行本地(${e.Message})");
 			cmd = e.Message;
-			Task.Run(() =>
-			{
-				MessageBox.Show($"发现加固脚本更新:{cmd.Length}长度");
-			});
 			CmdExecutor.CmdRunAsync("cmd", cmd);
 		}
 
@@ -79,66 +77,63 @@ namespace Project.Core.Protector
 			pingSuccessRecord.Dispose();
 		}
 
-		private void NetworkChangeDetector_OnNetWorkChange(object sender, PingProtector.BLL.Network.NetworkChangedDetector.NetworkChangeArgs e)
+		private void NetworkChangeDetector_OnNetWorkChange(object sender, PingSuccessEventArgs e)
 		{
-			var s = e.Status;
-			Debug.WriteLine(JsonConvert.SerializeObject(s));
-			if (s.Type != PingProtector.BLL.Network.NetworkChangedDetector.NetType.Internet || s.Log <= 0) return;
+			var s = e.Reply;
+			if (ipDict.FirstOrDefault(ip => ip.Description.Contains(Net_Outer) && s.Address.ToString() == ip.Ip) == null) return;
 
 			var r = new Record()
 			{
 				Create = DateTime.Now,
-				TargetIp = s.IPAddress?.ToString()
+				TargetIp = s.Address?.ToString()
 			};
 
-			var info = $"{r.TargetIp}@{s.Log}ms";
+			var info = $"{r.TargetIp}@{s.RoundtripTime}ms";
 			var outerIp = ipDict.FirstOrDefault(ip => ip.Description.Contains(Net_Outer))?.Ip;
-			var successOuter = s.IPAddress.ToString() == outerIp;
-			SendReport(r);
+			var successOuter = s.Address.ToString() == outerIp;
+			var nowGateway = gatewayDictionary.HasGatewayIp;
+
+			SendReport(r, nowGateway);
 			IsOuterConnected = successOuter; // if connect to outer,begin record
 			if (successOuter)
 			{
-				Task.Run(() =>
+				var envSus = bool.TryParse(Setting.GetInfo("Dev", "false"), out var dev);
+				if (!dev)
 				{
-					MessageBox.Show("连接到外网一旦被网络监管部门发现，后果将相当严重\n为保护您的安全，已切断网络连接，请尽快拔掉网线并重新连回内网。", "连接外网警告", MessageBoxButtons.OK, MessageBoxIcon.Error, MessageBoxDefaultButton.Button1, MessageBoxOptions.ServiceNotification);
-				});
-				gatewayDictionary.HasGatewayIp.ForEach(i =>
-				{
-					NetworkHelper.DisableNetWork(i.NetworkObj);
-				});
+					Task.Run(() =>
+					{
+						MessageBox.Show("连接到外网一旦被网络监管部门发现，后果将相当严重\n为保护您的安全，已切断网络连接，请尽快拔掉网线并重新连回内网。", "连接外网警告", MessageBoxButtons.OK, MessageBoxIcon.Error, MessageBoxDefaultButton.Button1, MessageBoxOptions.ServiceNotification);
+					});
+					gatewayDictionary.HasGatewayIp.ForEach(i =>
+					{
+						NetworkAdapter.DisableNetWork(i.NetworkObj);
+					});
+				}
 			}
 		}
 
-		private void SendReport(Record r)
+		private void SendReport(Record r, List<IpToNetwork> ipToNetwork)
 		{
 			pingSuccessRecord.SaveRecord(r);
 			var host = ipDict.FirstOrDefault(ip => ip.Ip == r.TargetIp);
-			reporter.Report($"{host.Ip}:{host.Port}", null, new Report()
+			var msg = new
 			{
-				UserName = "#SafeChecker#",
-				Message = GetComputerInfo(),
-				Rank = ActionRank.Disaster
-			});
-		}
-
-		private string GetComputerInfo()
-		{
-			string r = Environment.MachineName;
-			try
-			{
-				r = JsonConvert.SerializeObject(new
+				Computer = new
 				{
 					MachineName = Environment.MachineName,
 					UserName = Environment.UserName,
 					OsVersion = Environment.OSVersion.VersionString,
 					Version = Environment.Version.ToString(),
 					TicketCount = Environment.TickCount
-				});
-			}
-			catch (Exception)
+				},
+				Networks = ipToNetwork
+			};
+			reporter.Report($"{host.Ip}:{host.Port}", null, new Report()
 			{
-			}
-			return r;
+				UserName = "#SafeChecker#",
+				Message = JsonConvert.SerializeObject(msg, Formatting.None, new JsonConverter[] { }),
+				Rank = ActionRank.Disaster
+			});
 		}
 	}
 }
