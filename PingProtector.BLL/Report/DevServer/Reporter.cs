@@ -2,6 +2,7 @@
 using DotNet4.Utilities.UtilReg;
 using Newtonsoft.Json;
 using System;
+using System.Diagnostics;
 using System.Net.Http;
 
 namespace DevServer
@@ -20,7 +21,7 @@ namespace DevServer
 			http = new HttpClient();
 		}
 
-		public HttpResponseMessage Report(string host = null, string logPath = null, Report report = null, string method = "post")
+		public HttpResponseMessage Report(string host = null, string logPath = null, Report report = null, string method = "Post")
 		{
 			if (host == null) host = Host;
 			if (!host.StartsWith("http")) host = $"http://{host}";
@@ -37,7 +38,14 @@ namespace DevServer
 					HttpContent content = new StringContent(str);
 					content.Headers.ContentType = new System.Net.Http.Headers.MediaTypeHeaderValue("application/json");
 					content.Headers.Add("Device", report.Device);
-					var res = http.SendAsync(new HttpRequestMessage(new HttpMethod(method), $"{host}/{logPath}")).Result;
+					var msg = new HttpRequestMessage()
+					{
+						Content = content,
+						Method = new HttpMethod(method),
+						RequestUri = new Uri($"{host}/{logPath}"),
+					};
+					var res = http.SendAsync(msg).Result;
+					Debug.WriteLine($"report result:{JsonConvert.SerializeObject(res)}");
 					return res;
 				}
 			}
