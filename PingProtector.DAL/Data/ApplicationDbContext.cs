@@ -1,4 +1,4 @@
-﻿using Project.Core.Protector.DAL.Record;
+﻿using Project.Core.Protector.DAL.Entity.Record;
 using System;
 using System.Collections.Generic;
 using System.Data.Entity;

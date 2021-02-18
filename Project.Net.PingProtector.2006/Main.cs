@@ -8,7 +8,7 @@ using PingProtector.BLL.Shell;
 using PingProtector.BLL.Updater;
 using Project.Core.Protector.BLL.Network.NetworkChangedDetector;
 using Project.Core.Protector.BLL.Network.PingDetector;
-using Project.Core.Protector.DAL.Record;
+using Project.Core.Protector.DAL.Entity.Record;
 using System;
 using System.Collections.Generic;
 using System.Diagnostics;

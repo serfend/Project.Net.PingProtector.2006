@@ -1,0 +1,6 @@
+C:\Users\huawei\Documents\github\Project.Net.PingProtector.2006\Common\bin\Debug\Common.dll
+C:\Users\huawei\Documents\github\Project.Net.PingProtector.2006\Common\bin\Debug\Common.pdb
+C:\Users\huawei\Documents\github\Project.Net.PingProtector.2006\Common\obj\Debug\Common.csprojAssemblyReference.cache
+C:\Users\huawei\Documents\github\Project.Net.PingProtector.2006\Common\obj\Debug\Common.csproj.CoreCompileInputs.cache
+C:\Users\huawei\Documents\github\Project.Net.PingProtector.2006\Common\obj\Debug\Common.dll
+C:\Users\huawei\Documents\github\Project.Net.PingProtector.2006\Common\obj\Debug\Common.pdb

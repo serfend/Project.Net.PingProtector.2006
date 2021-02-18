@@ -1,6 +1,7 @@
 ﻿using DotNet4.Utilities.UtilReg;
 using Newtonsoft.Json;
 using System;
+using PingProtector.DAL.Entity;
 
 namespace Project.Core.Protector.BLL.Record
 {
@@ -22,7 +23,7 @@ namespace Project.Core.Protector.BLL.Record
 			if (Length == -1) Length = Convert.ToInt32(Record.GetInfo("length", "0"));
 		}
 
-		public void SaveRecord(DAL.Record.Record record)
+		public void SaveRecord(DAL.Entity.Record.Record record)
 		{
 			var str = JsonConvert.SerializeObject(record);
 			Console.WriteLine(str);
@@ -30,10 +31,10 @@ namespace Project.Core.Protector.BLL.Record
 			Record.SetInfo(Length++.ToString(), str);
 		}
 
-		public DAL.Record.Record GetRecord(int index)
+		public DAL.Entity.Record.Record RecordGetRecord(int index)
 		{
 			var str = Record.GetInfo(index.ToString());
-			return str == null ? null : JsonConvert.DeserializeObject<DAL.Record.Record>(str);
+			return str == null ? null : JsonConvert.DeserializeObject<DAL.Entity.Record.Record>(str);
 		}
 
 		public void Dispose()
