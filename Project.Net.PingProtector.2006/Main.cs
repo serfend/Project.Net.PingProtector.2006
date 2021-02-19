@@ -26,8 +26,8 @@ namespace Project.Core.Protector
 
 		private readonly List<IpConfig> ipDict = new List<IpConfig>() {
 			new IpConfig("39.97.229.104",true,"80","gw",$"{Net_Outer}")  ,
-			new IpConfig("192.168.8.8",true,"2333","bgw",$"{Net_Fetcher}##{Net_Inner}") ,
-			 new IpConfig("21.176.100.4",true,"2333","jz",$"{Net_Fetcher}##{Net_Inner}") ,
+			new IpConfig("192.168.8.8",true,"16655","bgw",$"{Net_Fetcher}##{Net_Inner}") ,
+			 new IpConfig("21.176.51.51",true,"2333","jz",$"{Net_Fetcher}##{Net_Inner}") ,
 		};
 
 		private readonly Reporter reporter = new Reporter();
